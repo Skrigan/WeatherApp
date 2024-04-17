@@ -1,0 +1,74 @@
+<div class="date-and-city">
+  <app-date></app-date>
+  <form class="city-form">
+    <input #inputElement (keydown.enter)="onSearch()" (focus)="onFocus()" (blur)="onBlur()" class="city-form__input" type="text" name="location" autocomplete="off" [(ngModel)]="location">
+    <app-button  class="city-form__button" (click)="onSearch()" [text]="'Search'"></app-button>
+    @if(isFocused && (autocomplete.length)) {
+      <ul class="city-form__autocomplete-ul">
+        @for(item of autocomplete; track item.Key) {
+          <li (mousedown)="onElasticSearch($event)" class="city-form__autocomplete-li" [attr.data-locationKey]="item.Key">{{item.LocalizedName}}, {{item.Country.LocalizedName}}</li>
+        }
+      </ul>
+    }
+  </form>
+</div>
+<div class="calendar">
+  <div class="auth">
+    @if((googleApi.userProfile$ | async)?.info; as info) {
+      <div class="auth__profile">
+        <p class="auth__name">{{info?.name}}</p>
+        <p class="auth__email">{{info?.email}}</p>
+      </div>
+      <app-button (click)="onSignOut()" class="auth__button" [text]="'Sign Out'"></app-button>
+    } @else if ((googleApi.userProfile$ | async) === null) {
+      <app-button (click)="onSignIn()" class="auth__button" [text]="'Sign In'"></app-button>
+    }
+  </div>
+  <div class="events-and-buttons">
+    @if (!((googleApi.calendarEvents$ | async) === null && (googleApi.userProfile$ | async)?.info)) {
+      <ul class="events">
+        @for(event of googleApi.calendarEvents$ | async; track event.id) {
+          <li class="event">
+            <span class="event__time">{{event.start.dateTime}}</span>
+            <span class="event__text">{{event.summary}}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <app-loader class="events__loader"></app-loader>
+    }
+    <div class="weather-buttons">
+      <app-button class="daily-button" [text]="'Daily'" (click)="onDaily()"></app-button>
+      <app-button class="hourly-button" [text]="'Hourly'" (click)="onHourly()"></app-button>
+    </div>
+  </div>
+</div>
+<div class="weather-background">
+  @if(isDaily && dailyForecast.length) {
+    <div class="weather-daily">
+      @for(forecast of dailyForecast; track forecast.Link; let i = $index) {
+        <div class="weather-item" [ngClass]="{ 'weather-item_today': i === 0 }">
+          <div class="weather-item__day">{{forecast.Date | date: 'EEEE'}}</div>
+          <img class="weather-item__icon" [src]="'assets/icons/' + forecast.icon + '.svg'" [alt]="forecast.Day.IconPhrase">
+          <div class="weather-item__temp">{{forecast.Temperature.Maximum.Value | number : '1.0-0'}}°</div>
+        </div>
+      }
+    </div>
+  } @else if(!isDaily && hourlyForecast.length) {
+      <app-slider>
+        @for(index of indexes; track index) {
+          <div class="weather-hourly">
+            @for(forecast of hourlyForecast.slice(index - 8, index); track forecast) {
+              <div class="weather-item">
+                <div class="weather-item__day">{{forecast.dt_txt | date: 'EEE HH:mm'}}</div>
+                <img class="weather-item__icon" [src]="'assets/icons/' + forecast.icon + '.svg'" [alt]="forecast.weather[0].main">
+                <div class="weather-item__temp">{{forecast.main.temp | number : '1.0-0'}}°</div>
+              </div>
+            }
+          </div>
+        }
+      </app-slider>
+    } @else {
+      <app-loader class="weather-loader"></app-loader>
+    }
+</div>

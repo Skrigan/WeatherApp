@@ -1,0 +1,10 @@
+.date {
+  font-size: 41px;
+  font-weight: 300;
+  @media (max-width: 900px) {
+    text-align: center;
+  }
+  @media (max-width: 640px) {
+    font-size: 30px;
+  }
+}

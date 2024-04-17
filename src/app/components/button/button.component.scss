@@ -1,0 +1,27 @@
+:host {
+  width: fit-content;
+}
+
+.button {
+  width: 139px;
+  height: 44px;
+  font-size: 25px;
+  color: white;
+  background-color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  @media (max-width: 640px) {
+    font-size: 20px;
+    width: 94px;
+    height: 38px;
+  }
+
+  &:hover {
+    background-color: #1e1e1e;
+  }
+
+  &:active {
+    background-color: #323232;
+  }
+}
