@@ -44,22 +44,19 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if ("geolocation" in navigator) {
-    //   navigator.geolocation.getCurrentPosition((position) => {
-    //     const {latitude, longitude} = position.coords;
-    //     this.latitude = latitude
-    //     this.longitude = longitude
-    //
-    //     this.weatherService.getGeoposition(latitude, longitude)
-    //       .subscribe((geoposition) => {
-    //
-    //         this.location = `${geoposition.EnglishName}, ${geoposition.Country.EnglishName}`;
-    //         this.locationKey = geoposition.Key;
-    //
-    //         this.getForecast();
-    //     });
-    //   });
-    // }
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.weatherService.getGeoposition(latitude, longitude)
+          .subscribe((geoposition) => {
+            this.location = `${geoposition.EnglishName}, ${geoposition.Country.EnglishName}`;
+            this.locationKey = geoposition.Key;
+            this.getForecast();
+          });
+      });
+    }
 
     fromEvent(this.inputElement.nativeElement, 'keyup')
       .pipe(
