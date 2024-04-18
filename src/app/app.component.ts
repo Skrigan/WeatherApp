@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
             this.location = `${geoposition.EnglishName}, ${geoposition.Country.EnglishName}`;
             this.locationKey = geoposition.Key;
             this.getForecast();
+            this.changeBodyBackground();
           });
       });
     }
@@ -74,12 +75,15 @@ export class AppComponent implements OnInit {
 
   changeBodyBackground() {
     if (this.latitude && this.longitude) {
-      const { body } = document;
-      while (body.classList.length > 0) {
-        body.classList.remove(body.classList[0]);
-      }
       this.weatherService.getCurrentWeather(this.latitude, this.longitude).subscribe((weather) => {
-        document.body.classList.add(`body_${openWeatherCodeToIcon(weather.weather[0].id)}`);
+        const className = `body_${openWeatherCodeToIcon(weather.weather[0].id)}`;
+        const { body } = document;
+        if (!body.classList.contains(className)) {
+          while (body.classList.length > 0) {
+            body.classList.remove(body.classList[0]);
+          }
+          body.classList.add(className);
+        }
       });
     }
   }
