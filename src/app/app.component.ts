@@ -4,13 +4,12 @@ import {
 import {
   debounceTime, filter, fromEvent, map, tap,
 } from 'rxjs';
-import { DailyForecast } from './types/DailyForecast';
+import { DailyForecastItem } from './types/accuWeather/daily-forecast';
 import { GoogleApiService } from './services/google-api.service';
 import { WeatherService } from './services/weather.service';
-import { HourlyForecast } from './types/HourlyForecast';
-import { Autocomplete } from './types/Autocomplete';
-import { openWeatherCodeToIcon } from './utils/openWeatherCodeToIcon';
-import { accuWeatherPhraseToIcon } from './utils/accuWeatherPhraseToIcon';
+import { HourlyForecastItem } from './types/openWeather/hourly-forecast';
+import { Autocomplete } from './types/accuWeather/autocomplete';
+import { phraseToIcon } from './data/phraseToIcon';
 
 @Component({
   selector: 'app-root',
@@ -30,9 +29,9 @@ export class AppComponent implements OnInit {
 
   indexes: number[] = [8, 16, 24, 32, 40];
 
-  dailyForecast: Array<DailyForecast['DailyForecasts'][number] & { icon: number }> = [];
+  dailyForecast: Array<DailyForecastItem & { icon: string }> = [];
 
-  hourlyForecast: Array<HourlyForecast['list'][number] & { icon: number }> = [];
+  hourlyForecast: Array<HourlyForecastItem & { icon: string }> = [];
 
   autocomplete: Autocomplete = [];
 
@@ -49,9 +48,9 @@ export class AppComponent implements OnInit {
         const { latitude, longitude } = position.coords;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.weatherService.getGeoposition(latitude, longitude)
+        this.weatherService.getCity(latitude, longitude)
           .subscribe((geoposition) => {
-            this.location = `${geoposition.EnglishName}, ${geoposition.Country.EnglishName}`;
+            this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
             this.locationKey = geoposition.Key;
             this.getForecast();
             this.changeBodyBackground();
@@ -66,7 +65,7 @@ export class AppComponent implements OnInit {
         map((ev: any) => (ev.target as HTMLInputElement).value),
         filter((str) => (str.length > 2)),
       ).subscribe((str) => {
-        this.weatherService.getAutocompleteSearch(str)
+        this.weatherService.getAutocomplete(str)
           .subscribe((autocomplete) => {
             this.autocomplete = autocomplete.slice(0, 5);
           });
@@ -76,14 +75,18 @@ export class AppComponent implements OnInit {
   changeBodyBackground() {
     if (this.latitude && this.longitude) {
       this.weatherService.getCurrentWeather(this.latitude, this.longitude).subscribe((weather) => {
-        const className = `body_${openWeatherCodeToIcon(weather.weather[0].id)}`;
-        const { body } = document;
-        if (!body.classList.contains(className)) {
-          while (body.classList.length > 0) {
-            body.classList.remove(body.classList[0]);
-          }
-          body.classList.add(className);
-        }
+        const img = new Image();
+        const { main } = weather.weather[0];
+        const { description } = weather.weather[0];
+        let path = '';
+
+        if (main !== 'Clouds') path = main;
+        else path = `${main}/${description}`;
+
+        img.src = `./assets/backgrounds/${path}.jpg`;
+        img.onload = () => {
+          document.body.style.backgroundImage = `url(${img.src})`;
+        };
       });
     }
   }
@@ -108,7 +111,7 @@ export class AppComponent implements OnInit {
     const target = event.target as HTMLLIElement;
     this.location = target.textContent!;
     this.locationKey = target.getAttribute('data-locationKey')!;
-    this.weatherService.getSearchByLocationKey(this.locationKey).subscribe((location) => {
+    this.weatherService.getCityByLocationKey(this.locationKey).subscribe((location) => {
       this.latitude = location.GeoPosition.Latitude;
       this.longitude = location.GeoPosition.Longitude;
       this.getForecast();
@@ -130,12 +133,17 @@ export class AppComponent implements OnInit {
     if (this.isDaily && this.locationKey) {
       this.weatherService.getDailyForecast(this.locationKey)
         .subscribe((forecast) => {
-          this.dailyForecast = forecast.DailyForecasts.map((item) => Object.assign(item, { icon: accuWeatherPhraseToIcon(item.Day.IconPhrase) }));
+          this.dailyForecast = forecast.DailyForecasts.map((item) =>
+            Object.assign(item, { icon: phraseToIcon[item.Day.IconPhrase] }));
         });
     } else if (this.latitude && this.longitude) {
       this.weatherService.getHourlyForecast(this.latitude, this.longitude)
         .subscribe((forecast) => {
-          this.hourlyForecast = forecast.list.map((item) => Object.assign(item, { icon: openWeatherCodeToIcon(item.weather[0].id) }));
+          this.hourlyForecast = forecast.list.map((item) => {
+            const { main } = item.weather[0];
+            const { description } = item.weather[0];
+            return Object.assign(item, { icon: main !== 'Clouds' ? main : `${main}/${description}` });
+          });
         });
     }
   }

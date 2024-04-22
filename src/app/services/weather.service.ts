@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Autocomplete } from '../types/Autocomplete';
-import { DailyForecast } from '../types/DailyForecast';
-import { SearchByLocation } from '../types/SearchByLocation';
-import { HourlyForecast } from '../types/HourlyForecast';
+import { Autocomplete } from '../types/accuWeather/autocomplete';
+import { DailyForecast } from '../types/accuWeather/daily-forecast';
+import { CitySearch } from '../types/accuWeather/city-search';
+import { HourlyForecast } from '../types/openWeather/hourly-forecast';
 import { CacheService } from './cache/cache.service';
 import { cachedRequest } from './cache/cache-decorator';
-import { Geoposition } from '../types/Geoposition';
-import { CurrentWeather } from '../types/CurrentWeather';
+import { CurrentWeather } from '../types/openWeather/current-weather';
+import { City } from '../types/accuWeather/city';
 
 // for AccuWeather
-const apikey = 'CEEf59mzLjAg6SDSiwRZ62lj5Sm0JVqd';
+const apikey = '4eLXHTUdWv7LWEpXMY5Tx4QCwa15qjAw';
 // for OpenWeather
 const appid = '87bea92a8ecb01b03d84f152dad4a0ad';
 
@@ -21,7 +21,7 @@ export class WeatherService {
   constructor(private http: HttpClient, private cache: CacheService) { }
 
   @cachedRequest(function () { return this.cache; })
-  getAutocompleteSearch(text: string) {
+  getAutocomplete(text: string) {
     return this.http.get<Autocomplete>('https://dataservice.accuweather.com/locations/v1/cities/autocomplete', {
       params: {
         apikey,
@@ -32,7 +32,7 @@ export class WeatherService {
 
   @cachedRequest(function () { return this.cache; })
   getCitySearch(text: string) {
-    return this.http.get<SearchByLocation>('https://dataservice.accuweather.com/locations/v1/cities/search', {
+    return this.http.get<CitySearch>('https://dataservice.accuweather.com/locations/v1/cities/search', {
       params: {
         apikey,
         q: text,
@@ -41,8 +41,8 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getGeoposition(latitude: number, longitude: number) {
-    return this.http.get<Geoposition>('https://dataservice.accuweather.com/locations/v1/cities/geoposition/search', {
+  getCity(latitude: number, longitude: number) {
+    return this.http.get<City>('https://dataservice.accuweather.com/locations/v1/cities/geoposition/search', {
       params: {
         apikey,
         q: `${latitude}, ${longitude}`,
@@ -51,8 +51,8 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getSearchByLocationKey(locationKey: string) {
-    return this.http.get<SearchByLocation[number]>(`https://dataservice.accuweather.com/locations/v1/${locationKey}`, {
+  getCityByLocationKey(locationKey: string) {
+    return this.http.get<CitySearch[number]>(`https://dataservice.accuweather.com/locations/v1/${locationKey}`, {
       params: {
         apikey,
       },

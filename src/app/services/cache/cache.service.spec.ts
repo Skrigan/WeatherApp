@@ -14,15 +14,15 @@ describe('cacheService testing', () => {
     cache = new CacheService();
     service = new WeatherService(httpClientSpy, cache);
   });
-  it('should call once', () => {
+  it('should call http.get once', () => {
     const response = {};
     jest.spyOn(httpClientSpy, 'get').mockReturnValue(of(response));
 
-    service.getSearchByLocationKey('28580');
-    service.getSearchByLocationKey('178087');
-    service.getSearchByLocationKey('28580');
-    service.getSearchByLocationKey('28580');
-    service.getSearchByLocationKey('178087');
+    service.getCityByLocationKey('28580');
+    service.getCityByLocationKey('178087');
+    service.getCityByLocationKey('28580');
+    service.getCityByLocationKey('28580');
+    service.getCityByLocationKey('178087');
 
     expect(httpClientSpy.get).toBeCalledTimes(2);
   });

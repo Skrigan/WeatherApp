@@ -7,38 +7,10 @@
 body {
   min-height: 100vh;
   padding: 140px 5vw 20px 5vw;
-  background-image: url("assets/backgrounds/default.jpg");
+  background-color: #6b6b6b;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-}
-
-.body_1 {
-  background-image: url("assets/backgrounds/1.jpg");
-}
-.body_2 {
-  background-image: url("assets/backgrounds/2.jpg");
-}
-.body_4 {
-  background-image: url("assets/backgrounds/4.jpg");
-}
-.body_5 {
-  background-image: url("assets/backgrounds/4.jpg");
-}
-.body_6 {
-  background-image: url("assets/backgrounds/6.jpg");
-}
-.body_8 {
-  background-image: url("assets/backgrounds/8.jpg");
-}
-.body_12 {
-  background-image: url("assets/backgrounds/12.jpg");
-}
-.body_13 {
-  background-image: url("assets/backgrounds/13.jpg");
-}
-.body_18 {
-  background-image: url("assets/backgrounds/18.jpg");
 }
 
 .app {
