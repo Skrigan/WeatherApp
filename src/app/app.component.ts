@@ -4,15 +4,28 @@ import {
 import {
   debounceTime, filter, fromEvent, map, tap,
 } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DailyForecastItem } from './types/accuWeather/daily-forecast';
 import { GoogleApiService } from './services/google-api.service';
 import { WeatherService } from './services/weather.service';
 import { HourlyForecastItem } from './types/openWeather/hourly-forecast';
 import { Autocomplete } from './types/accuWeather/autocomplete';
 import { phraseToIcon } from './data/phraseToIcon';
+import { ButtonComponent } from './components/button/button.component';
+import { DateComponent } from './components/date/date.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import { SliderComponent } from './components/slider/slider.component';
+import {OAuthModule} from "angular-oauth2-oidc";
+
+// @ts-ignore
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  // providers: [GoogleApiService, WeatherService],
+  // @ts-ignore
+  imports: [CommonModule, ButtonComponent, DateComponent, LoaderComponent, SliderComponent, FormsModule, ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -39,7 +52,7 @@ export class AppComponent implements OnInit {
 
   isDaily = true;
 
-  constructor(public googleApi: GoogleApiService, private weatherService: WeatherService) {
+  constructor(private weatherService: WeatherService, public googleApi: GoogleApiService) {
   }
 
   ngOnInit() {
@@ -133,8 +146,7 @@ export class AppComponent implements OnInit {
     if (this.isDaily && this.locationKey) {
       this.weatherService.getDailyForecast(this.locationKey)
         .subscribe((forecast) => {
-          this.dailyForecast = forecast.DailyForecasts.map((item) =>
-            Object.assign(item, { icon: phraseToIcon[item.Day.IconPhrase] }));
+          this.dailyForecast = forecast.DailyForecasts.map((item) => Object.assign(item, { icon: phraseToIcon[item.Day.IconPhrase] }));
         });
     } else if (this.latitude && this.longitude) {
       this.weatherService.getHourlyForecast(this.latitude, this.longitude)
