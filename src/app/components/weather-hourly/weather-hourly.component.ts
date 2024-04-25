@@ -34,12 +34,12 @@ export class WeatherHourlyComponent {
 
   isScrolled: boolean | null = null;
 
-  onTouchStart(event: TouchEvent) {
+  onTouchStart(event: TouchEvent): void {
     this.startX = event.changedTouches[0].clientX;
     this.startY = event.changedTouches[0].clientY;
   }
 
-  onTouchMove(event: TouchEvent) {
+  onTouchMove(event: TouchEvent): void {
     if (this.isScrolled === null) {
       const deltaX = Math.abs(event.changedTouches[0].clientX - this.startX);
       const deltaY = Math.abs(event.changedTouches[0].clientY - this.startY);
@@ -51,7 +51,7 @@ export class WeatherHourlyComponent {
     }
   }
 
-  onTouchEnd(event: TouchEvent) {
+  onTouchEnd(event: TouchEvent): void {
     if (!this.isScrolled) {
       const endX = event.changedTouches[0].clientX;
 
@@ -69,14 +69,14 @@ export class WeatherHourlyComponent {
     this.startY = 0;
   }
 
-  moveLeft() {
+  moveLeft(): void {
     if (this.currentSlide !== 0) {
       this.currentSlide -= 1;
       this.slides.nativeElement.style.transform = `translateX(calc(-100% * ${this.currentSlide}))`;
     }
   }
 
-  moveRight() {
+  moveRight(): void {
     if (this.currentSlide !== this.maxSlide) this.currentSlide += 1;
     this.slides.nativeElement.style.transform = `translateX(calc(-100% * ${this.currentSlide}))`;
   }

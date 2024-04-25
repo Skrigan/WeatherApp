@@ -16,7 +16,7 @@ export class WeatherButtonsComponent {
 
   isDaily = true;
 
-  onForecastSwitch(isDaily: boolean) {
+  onForecastSwitch(isDaily: boolean): void {
     if (this.isDaily !== isDaily) {
       this.isDaily = isDaily;
       this.forecastSwitch.emit(isDaily);

@@ -14,11 +14,11 @@ export class AuthComponent {
   constructor(public googleApi: GoogleApiService) {
   }
 
-  onSignIn() {
+  onSignIn(): void {
     this.googleApi.signIn();
   }
 
-  onSignOut() {
+  onSignOut(): void {
     this.googleApi.signOut();
   }
 }

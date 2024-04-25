@@ -55,26 +55,26 @@ export class AppComponent implements OnInit {
   constructor(private weatherService: WeatherService, public googleApi: GoogleApiService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     setInterval(() => this.date = new Date(), 1000);
 
-    // if ('geolocation' in navigator) {
-    //   navigator.geolocation.getCurrentPosition((position) => {
-    //     const { latitude, longitude } = position.coords;
-    //     this.latitude = latitude;
-    //     this.longitude = longitude;
-    //     this.weatherService.getCity(latitude, longitude)
-    //       .subscribe((geoposition) => {
-    //         this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
-    //         this.locationKey = geoposition.Key;
-    //         this.getForecast();
-    //         this.changeBodyBackground();
-    //       });
-    //   });
-    // }
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.weatherService.getCity(latitude, longitude)
+          .subscribe((geoposition) => {
+            this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
+            this.locationKey = geoposition.Key;
+            this.getForecast();
+            this.changeBodyBackground();
+          });
+      });
+    }
   }
 
-  changeBodyBackground() {
+  changeBodyBackground(): void {
     if (this.latitude && this.longitude) {
       this.weatherService.getCurrentWeather(this.latitude, this.longitude).subscribe((weather) => {
         const img = new Image();
@@ -85,14 +85,14 @@ export class AppComponent implements OnInit {
         else path = `${main}/${description}`;
 
         img.src = `./assets/backgrounds/${path}.jpg`;
-        img.onload = () => {
+        img.onload = (): void => {
           document.body.style.backgroundImage = `url(${img.src})`;
         };
       });
     }
   }
 
-  onSearch(location: string) {
+  onSearch(location: string): void {
     this.searchReset();
 
     this.weatherService.getCitySearch(location)
@@ -117,7 +117,7 @@ export class AppComponent implements OnInit {
       });
   }
 
-  onElasticSearch(locationKey: string) {
+  onElasticSearch(locationKey: string): void {
     this.searchReset();
 
     this.weatherService.getCityByLocationKey(locationKey).subscribe((location) => {
@@ -129,7 +129,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  searchReset() {
+  searchReset(): void {
     this.searchStatus = 'load';
     this.dailyForecast = [];
     this.hourlyForecast = [];
@@ -139,7 +139,7 @@ export class AppComponent implements OnInit {
     this.longitude = undefined;
   }
 
-  getForecast() {
+  getForecast(): void {
     if (this.isDaily && this.locationKey) {
       this.weatherService.getDailyForecast(this.locationKey)
         .subscribe((forecast) => {
@@ -157,7 +157,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onForecastSwitch(isDaily: boolean) {
+  onForecastSwitch(isDaily: boolean): void {
     this.isDaily = isDaily;
 
     if ((isDaily && this.dailyForecast.length === 0)

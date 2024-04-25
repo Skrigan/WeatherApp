@@ -58,7 +58,7 @@ export class GoogleApiService {
     });
   }
 
-  signIn() {
+  signIn(): void {
     this.oAuthService.loadDiscoveryDocument().then(() => {
       this.oAuthService.tryLoginImplicitFlow().then(() => {
         this.oAuthService.initLoginFlow();
@@ -66,7 +66,7 @@ export class GoogleApiService {
     });
   }
 
-  signOut() {
+  signOut(): void {
     this.oAuthService.revokeTokenAndLogout();
     this.userProfile$.next(null);
     this.calendarEvents$.next(null);

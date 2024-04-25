@@ -20,6 +20,7 @@
         "airbnb-typescript/base"
       ],
       "rules": {
+        "@typescript-eslint/explicit-function-return-type": "error",
         "import/prefer-default-export": "off",
         "class-methods-use-this": "off",
         "linebreak-style": 0,

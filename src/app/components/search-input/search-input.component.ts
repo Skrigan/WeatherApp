@@ -42,7 +42,7 @@ export class SearchInputComponent implements OnInit {
   constructor(private weatherService: WeatherService, private cdr: ChangeDetectorRef) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     fromEvent(this.inputElement.nativeElement, 'keyup')
       .pipe(
         tap(() => { this.autocomplete = []; }),
@@ -58,11 +58,11 @@ export class SearchInputComponent implements OnInit {
       });
   }
 
-  onSearch() {
+  onSearch(): void {
     this.search.emit(this.location);
   }
 
-  onElasticSearch(event: MouseEvent) {
+  onElasticSearch(event: MouseEvent): void {
     this.autocomplete = [];
 
     const target = event.target as HTMLLIElement;
@@ -70,11 +70,11 @@ export class SearchInputComponent implements OnInit {
     this.elasticSearch.emit(target.getAttribute('data-locationKey')!);
   }
 
-  onFocus() {
+  onFocus(): void {
     this.isFocused = true;
   }
 
-  onBlur() {
+  onBlur(): void {
     this.isFocused = false;
   }
 }
