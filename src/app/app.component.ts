@@ -19,11 +19,12 @@ import { WeatherDailyComponent } from './components/weather-daily/weather-daily.
 import { WeatherComponent } from './components/weather/weather.component';
 import { AuthComponent } from './components/auth/auth.component';
 import {EventsComponent} from "./components/events/events.component";
+import {SearchInputComponent} from "./components/search-input/search-input.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, FormsModule, WeatherItemComponent, WeatherDailyComponent, WeatherComponent, AuthComponent, EventsComponent],
+  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, FormsModule, WeatherItemComponent, WeatherDailyComponent, WeatherComponent, AuthComponent, EventsComponent, SearchInputComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -31,8 +32,6 @@ export class AppComponent implements OnInit {
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
 
   date = new Date();
-
-  location = '';
 
   locationKey: string | undefined;
 
@@ -44,9 +43,9 @@ export class AppComponent implements OnInit {
 
   hourlyForecast: Array<HourlyForecastItem & { icon: string }> = [];
 
-  autocomplete: Autocomplete = [];
-
   isFocused = false;
+
+  location = '';
 
   isDaily = true;
 
@@ -70,19 +69,6 @@ export class AppComponent implements OnInit {
           });
       });
     }
-
-    fromEvent(this.inputElement.nativeElement, 'keyup')
-      .pipe(
-        tap(() => { this.autocomplete = []; }),
-        debounceTime(500),
-        map((ev: any) => (ev.target as HTMLInputElement).value),
-        filter((str) => (str.length > 2)),
-      ).subscribe((str) => {
-        this.weatherService.getAutocomplete(str)
-          .subscribe((autocomplete) => {
-            this.autocomplete = autocomplete.slice(0, 5);
-          });
-      });
   }
 
   changeBodyBackground() {
@@ -104,36 +90,32 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onSearch() {
+  onSearch(location: string) {
     this.searchReset();
 
-    this.weatherService.getCitySearch(this.location).subscribe((cities) => {
+    this.weatherService.getCitySearch(location).subscribe((cities) => {
       const city = cities[0];
       this.latitude = city.GeoPosition.Latitude;
       this.longitude = city.GeoPosition.Longitude;
-      this.location = `${city.LocalizedName}, ${city.Country.LocalizedName}`;
       this.locationKey = city.Key;
       this.getForecast();
       this.changeBodyBackground();
     });
   }
 
-  onElasticSearch(event: MouseEvent) {
+  onElasticSearch(locationKey: string) {
     this.searchReset();
 
-    const target = event.target as HTMLLIElement;
-    this.location = target.textContent!;
-    this.locationKey = target.getAttribute('data-locationKey')!;
-    this.weatherService.getCityByLocationKey(this.locationKey).subscribe((location) => {
+    this.weatherService.getCityByLocationKey(locationKey).subscribe((location) => {
       this.latitude = location.GeoPosition.Latitude;
       this.longitude = location.GeoPosition.Longitude;
+      this.locationKey = locationKey;
       this.getForecast();
       this.changeBodyBackground();
     });
   }
 
   searchReset() {
-    this.autocomplete = [];
     this.dailyForecast = [];
     this.hourlyForecast = [];
 
@@ -158,14 +140,6 @@ export class AppComponent implements OnInit {
           });
         });
     }
-  }
-
-  onFocus() {
-    this.isFocused = true;
-  }
-
-  onBlur() {
-    this.isFocused = false;
   }
 
   onDaily() {

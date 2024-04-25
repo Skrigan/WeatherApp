@@ -28,46 +28,6 @@
       font-size: 30px;
     }
   }
-
-
-  .city-form {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-
-    &__input {
-      width: 258px;
-      font-size: 25px;
-      border-radius: 5px;
-      outline: none;
-      border: none;
-      padding: 4px 15px;
-      @media (max-width: 640px) {
-        width: 170px;
-      }
-    }
-
-    &__autocomplete-ul {
-      width: 258px;
-      list-style-type: none;
-      padding: 10px 15px;
-      background-color: white;
-      font-size: 20px;
-      border-radius: 5px;
-      position: absolute;
-      top: 50px;
-      z-index: 1;
-    }
-    &__loader {
-      width: 258px;
-      height: 258px;
-    }
-    &__autocomplete-li {
-      padding: 5px 0;
-      cursor: pointer;
-    }
-  }
 }
 
 .calendar {

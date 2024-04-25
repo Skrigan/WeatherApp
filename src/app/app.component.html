@@ -1,16 +1,6 @@
 <div class="date-and-city">
   <h1 class="date">{{date | date:'hh:mm a'}}<br>{{date | date:'EEEE, d MMMM y'}}</h1>
-  <form class="city-form">
-    <input #inputElement (keydown.enter)="onSearch()" (focus)="onFocus()" (blur)="onBlur()" class="city-form__input" type="text" name="location" autocomplete="off" [(ngModel)]="location">
-    <button class="city-form__button" (click)="onSearch()" type="button">Search</button>
-    @if(isFocused && (autocomplete.length)) {
-      <ul class="city-form__autocomplete-ul">
-        @for(item of autocomplete; track item.Key) {
-          <li (mousedown)="onElasticSearch($event)" class="city-form__autocomplete-li" [attr.data-locationKey]="item.Key">{{item.LocalizedName}}, {{item.Country.LocalizedName}}</li>
-        }
-      </ul>
-    }
-  </form>
+  <app-search-input [setValue]="location" (search)="onSearch($event)" (elasticSearch)="onElasticSearch($event)"></app-search-input>
 </div>
 <div class="calendar">
   <app-auth></app-auth>
