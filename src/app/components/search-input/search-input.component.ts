@@ -65,6 +65,7 @@ export class SearchInputComponent implements OnInit, OnDestroy {
   }
 
   onSearch(): void {
+    this.inputElement.nativeElement.blur();
     this.search.emit(this.location);
   }
 
