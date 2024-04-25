@@ -1,6 +1,6 @@
 export const environment = {
   // for AccuWeather
-  apikey: 'uuTLw9nLu55OqCsABmvfBeASefuOfTxs',
+  apikey: 'j7VYw7BF101HRWfKDqPqkZCokZ7Mh5dK',
   // for OpenWeather
   appid: '87bea92a8ecb01b03d84f152dad4a0ad',
   oAuthConfig: {

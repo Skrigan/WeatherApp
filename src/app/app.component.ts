@@ -1,18 +1,11 @@
 import {
-  ChangeDetectionStrategy,
-  Component, ElementRef, OnInit, ViewChild,
+  Component, ElementRef, OnDestroy, OnInit, ViewChild,
 } from '@angular/core';
-import {
-  catchError,
-  debounceTime, filter, fromEvent, map, of, tap,
-} from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { DailyForecastItem } from './types/accuWeather/daily-forecast';
 import { GoogleApiService } from './services/google-api.service';
 import { WeatherService } from './services/weather.service';
 import { HourlyForecastItem } from './types/openWeather/hourly-forecast';
-import { Autocomplete } from './types/accuWeather/autocomplete';
 import { phraseToIcon } from './data/phraseToIcon';
 import { LoaderComponent } from './components/loader/loader.component';
 import { WeatherHourlyComponent } from './components/weather-hourly/weather-hourly.component';
@@ -23,15 +16,27 @@ import { AuthComponent } from './components/auth/auth.component';
 import { EventsComponent } from './components/events/events.component';
 import { SearchInputComponent } from './components/search-input/search-input.component';
 import { WeatherButtonsComponent } from './components/weather-buttons/weather-buttons.component';
+import {interval, Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, WeatherItemComponent, WeatherDailyComponent, WeatherComponent, AuthComponent, EventsComponent, SearchInputComponent, WeatherButtonsComponent],
+  imports: [
+    CommonModule,
+    LoaderComponent,
+    WeatherHourlyComponent,
+    WeatherItemComponent,
+    WeatherDailyComponent,
+    WeatherComponent,
+    AuthComponent,
+    EventsComponent,
+    SearchInputComponent,
+    WeatherButtonsComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
 
   date = new Date();
@@ -52,11 +57,13 @@ export class AppComponent implements OnInit {
 
   searchStatus: string | undefined;
 
+  interval!: Subscription;
+
   constructor(private weatherService: WeatherService, public googleApi: GoogleApiService) {
   }
 
   ngOnInit(): void {
-    setInterval(() => this.date = new Date(), 1000);
+    this.interval = interval(1000).subscribe(() => this.date = new Date());
 
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -72,6 +79,10 @@ export class AppComponent implements OnInit {
           });
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.interval.unsubscribe();
   }
 
   changeBodyBackground(): void {
@@ -143,7 +154,8 @@ export class AppComponent implements OnInit {
     if (this.isDaily && this.locationKey) {
       this.weatherService.getDailyForecast(this.locationKey)
         .subscribe((forecast) => {
-          this.dailyForecast = forecast.DailyForecasts.map((item) => Object.assign(item, { icon: phraseToIcon[item.Day.IconPhrase] }));
+          this.dailyForecast = forecast.DailyForecasts
+            .map((item) => Object.assign(item, { icon: phraseToIcon[item.Day.IconPhrase] }));
         });
     } else if (this.latitude && this.longitude) {
       this.weatherService.getHourlyForecast(this.latitude, this.longitude)

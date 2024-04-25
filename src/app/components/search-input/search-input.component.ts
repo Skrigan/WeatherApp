@@ -3,7 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -11,7 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  debounceTime, filter, fromEvent, map, tap,
+  debounceTime, filter, fromEvent, map, Subscription, tap,
 } from 'rxjs';
 import { WeatherService } from '../../services/weather.service';
 import { Autocomplete } from '../../types/accuWeather/autocomplete';
@@ -24,7 +24,7 @@ import { Autocomplete } from '../../types/accuWeather/autocomplete';
   styleUrl: './search-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchInputComponent implements OnInit {
+export class SearchInputComponent implements OnInit, OnDestroy {
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
 
   @Input() set setValue(value: string) { this.location = value; }
@@ -39,13 +39,16 @@ export class SearchInputComponent implements OnInit {
 
   isFocused = false;
 
+  keyupEvent!: Subscription;
+
   constructor(private weatherService: WeatherService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
-    fromEvent(this.inputElement.nativeElement, 'keyup')
+    this.keyupEvent = fromEvent(this.inputElement.nativeElement, 'keyup')
       .pipe(
         tap(() => { this.autocomplete = []; }),
+        tap(() => console.log('key!')),
         debounceTime(500),
         map((ev: any) => (ev.target as HTMLInputElement).value),
         filter((str) => (str.length > 2)),
@@ -56,6 +59,10 @@ export class SearchInputComponent implements OnInit {
             this.cdr.detectChanges();
           });
       });
+  }
+
+  ngOnDestroy(): void {
+    this.keyupEvent.unsubscribe();
   }
 
   onSearch(): void {

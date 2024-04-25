@@ -1,18 +1,11 @@
 import { Injectable } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { OAuthService, UserInfo } from 'angular-oauth2-oidc';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Events } from '../types/googleCalendar/events';
+import { Events, Event } from '../types/googleCalendar/events';
 import { environment } from '../../environments/environment';
 
 const { oAuthConfig } = environment;
-
-type UserInfo = {
-  info: {
-    email: string
-    name: string
-  }
-};
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +13,7 @@ type UserInfo = {
 export class GoogleApiService {
   userProfile$ = new BehaviorSubject<UserInfo | null | undefined>(undefined);
 
-  calendarEvents$ = new BehaviorSubject<Events['items'] | null>(null);
+  calendarEvents$ = new BehaviorSubject<Event[] | null>(null);
 
   constructor(private oAuthService: OAuthService, private http: HttpClient) {
     oAuthService.configure(oAuthConfig);

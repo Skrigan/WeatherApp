@@ -8,5 +8,9 @@ import {
 function oAuthStorageFactory(): OAuthStorage { return localStorage; }
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient(), provideOAuthClient(), { provide: OAuthStorage, useFactory: oAuthStorageFactory }],
+  providers: [
+    provideHttpClient(),
+    provideOAuthClient(),
+    { provide: OAuthStorage, useFactory: oAuthStorageFactory },
+  ],
 };
