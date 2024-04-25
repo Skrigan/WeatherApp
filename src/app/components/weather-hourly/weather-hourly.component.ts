@@ -6,10 +6,10 @@ import { HourlyForecastItem } from '../../types/openWeather/hourly-forecast';
 import { WeatherItemComponent } from '../weather-item/weather-item.component';
 
 @Component({
-  selector: 'app-slider',
+  selector: 'app-weather-hourly',
   standalone: true,
-  templateUrl: './slider.component.html',
-  styleUrl: './slider.component.scss',
+  templateUrl: './weather-hourly.component.html',
+  styleUrl: './weather-hourly.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
@@ -17,7 +17,7 @@ import { WeatherItemComponent } from '../weather-item/weather-item.component';
     WeatherItemComponent,
   ],
 })
-export class SliderComponent {
+export class WeatherHourlyComponent {
   @ViewChild('slides', { static: true }) slides!: ElementRef;
 
   @Input({ required: true }) hourlyForecast!: Array<HourlyForecastItem & { icon: string }>;

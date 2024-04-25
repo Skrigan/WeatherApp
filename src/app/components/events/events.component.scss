@@ -1,0 +1,35 @@
+.events {
+  display: inline-block;
+  list-style-type: none;
+  padding: 0 30px 0 0;
+  height: 150px;
+  max-width: 377px;
+  overflow-y: auto;
+
+  .event {
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+    &__time {
+      display: inline-block;
+      text-align: center;
+      line-height: 36px;
+      width: 64px;
+      border-radius: 18px;
+      font-size: 18px;
+      color: white;
+      background-color: #122E65;
+      margin-right: 26px;
+    }
+    &__text {
+      font-size: 23px;
+    }
+  }
+
+  &__loader {
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin: 15px 0;
+  }
+}

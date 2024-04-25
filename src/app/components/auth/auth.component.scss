@@ -1,0 +1,19 @@
+.auth {
+  height: 50px;
+  font-size: 20px;
+  display: flex;
+  margin-bottom: 30px;
+  align-items: center;
+  gap: 40px;
+  @media (max-width: 640px) {
+    font-size: 15px;
+    gap: 30px;
+  }
+  &__picture {
+    border-radius: 50%;
+    height: 60px;
+  }
+  &__name {
+    margin-bottom: 5px;
+  }
+}

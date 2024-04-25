@@ -1,0 +1,11 @@
+<div class="auth">
+  @if((googleApi.userProfile$ | async)?.info; as info) {
+    <div class="auth__profile">
+      <p class="auth__name">{{info?.name}}</p>
+      <p class="auth__email">{{info?.email}}</p>
+    </div>
+    <button (click)="onSignOut()" class="auth__button" type="button">Sign Out</button>
+  } @else if ((googleApi.userProfile$ | async) === null) {
+    <button (click)="onSignIn()" class="auth__button" type="button">Sign In</button>
+  }
+</div>

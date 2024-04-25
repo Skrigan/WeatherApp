@@ -13,30 +13,9 @@
   </form>
 </div>
 <div class="calendar">
-  <div class="auth">
-    @if((googleApi.userProfile$ | async)?.info; as info) {
-      <div class="auth__profile">
-        <p class="auth__name">{{info?.name}}</p>
-        <p class="auth__email">{{info?.email}}</p>
-      </div>
-      <button (click)="onSignOut()" class="auth__button" type="button">Sign Out</button>
-    } @else if ((googleApi.userProfile$ | async) === null) {
-    <button (click)="onSignIn()" class="auth__button" type="button">Sign In</button>
-    }
-  </div>
+  <app-auth></app-auth>
   <div class="events-and-buttons">
-    @if (!((googleApi.calendarEvents$ | async) === null && (googleApi.userProfile$ | async)?.info)) {
-      <ul class="events">
-        @for(event of googleApi.calendarEvents$ | async; track event.id) {
-          <li class="event">
-            <span class="event__time">{{event.start.dateTime}}</span>
-            <span class="event__text">{{event.summary}}</span>
-          </li>
-        }
-      </ul>
-    } @else {
-      <app-loader class="events__loader"></app-loader>
-    }
+    <app-events></app-events>
     <div class="weather-buttons">
       <button (click)="onDaily()" class="daily-button" type="button">Daily</button>
       <button (click)="onHourly()" class="hourly-button" type="button">Hourly</button>

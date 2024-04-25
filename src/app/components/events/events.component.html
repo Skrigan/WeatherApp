@@ -1,0 +1,12 @@
+@if (!((googleApi.calendarEvents$ | async) === null && (googleApi.userProfile$ | async)?.info)) {
+  <ul class="events">
+    @for(event of googleApi.calendarEvents$ | async; track event.id) {
+      <li class="event">
+        <span class="event__time">{{event.start.dateTime}}</span>
+        <span class="event__text">{{event.summary}}</span>
+      </li>
+    }
+  </ul>
+} @else {
+  <app-loader class="events__loader"></app-loader>
+}

@@ -2,8 +2,10 @@
   @if(isDaily && dailyForecast.length) {
   <app-weather-daily [dailyForecast]="dailyForecast"></app-weather-daily>
   } @else if(!isDaily && hourlyForecast.length) {
-  <app-slider [hourlyForecast]="hourlyForecast"></app-slider>
+  <app-weather-hourly [hourlyForecast]="hourlyForecast"></app-weather-hourly>
   } @else {
   <app-loader class="weather-loader"></app-loader>
   }
 </div>
+
+

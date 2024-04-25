@@ -1,15 +1,15 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {DailyForecastItem} from '../../types/accuWeather/daily-forecast';
-import {HourlyForecastItem} from '../../types/openWeather/hourly-forecast';
-import {LoaderComponent} from "../loader/loader.component";
-import {SliderComponent} from "../slider/slider.component";
-import {WeatherDailyComponent} from "../weather-daily/weather-daily.component";
+import { DailyForecastItem } from '../../types/accuWeather/daily-forecast';
+import { HourlyForecastItem } from '../../types/openWeather/hourly-forecast';
+import { LoaderComponent } from '../loader/loader.component';
+import { WeatherHourlyComponent } from '../weather-hourly/weather-hourly.component';
+import { WeatherDailyComponent } from '../weather-daily/weather-daily.component';
 
 @Component({
   selector: 'app-weather',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, SliderComponent, WeatherDailyComponent],
+  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, WeatherDailyComponent],
   templateUrl: './weather.component.html',
   styleUrl: './weather.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

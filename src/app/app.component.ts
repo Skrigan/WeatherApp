@@ -13,15 +13,17 @@ import { HourlyForecastItem } from './types/openWeather/hourly-forecast';
 import { Autocomplete } from './types/accuWeather/autocomplete';
 import { phraseToIcon } from './data/phraseToIcon';
 import { LoaderComponent } from './components/loader/loader.component';
-import { SliderComponent } from './components/slider/slider.component';
+import { WeatherHourlyComponent } from './components/weather-hourly/weather-hourly.component';
 import { WeatherItemComponent } from './components/weather-item/weather-item.component';
-import {WeatherDailyComponent} from "./components/weather-daily/weather-daily.component";
-import {WeatherComponent} from "./components/weather/weather.component";
+import { WeatherDailyComponent } from './components/weather-daily/weather-daily.component';
+import { WeatherComponent } from './components/weather/weather.component';
+import { AuthComponent } from './components/auth/auth.component';
+import {EventsComponent} from "./components/events/events.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, SliderComponent, FormsModule, WeatherItemComponent, WeatherDailyComponent, WeatherComponent],
+  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, FormsModule, WeatherItemComponent, WeatherDailyComponent, WeatherComponent, AuthComponent, EventsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -164,14 +166,6 @@ export class AppComponent implements OnInit {
 
   onBlur() {
     this.isFocused = false;
-  }
-
-  onSignIn() {
-    this.googleApi.signIn();
-  }
-
-  onSignOut() {
-    this.googleApi.signOut();
   }
 
   onDaily() {
