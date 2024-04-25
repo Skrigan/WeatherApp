@@ -9,6 +9,9 @@
     font-size: 15px;
     gap: 30px;
   }
+  @media (max-width: 450px) {
+    gap: 15px;
+  }
   &__picture {
     border-radius: 50%;
     height: 60px;

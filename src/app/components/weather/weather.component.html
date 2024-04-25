@@ -3,9 +3,9 @@
   <app-weather-daily [dailyForecast]="dailyForecast"></app-weather-daily>
   } @else if(!isDaily && hourlyForecast.length) {
   <app-weather-hourly [hourlyForecast]="hourlyForecast"></app-weather-hourly>
-  } @else {
+  } @else if (searchStatus === 'load') {
   <app-loader class="weather-loader"></app-loader>
+  } @else if (searchStatus !== undefined) {
+  <p class="error-message">{{searchStatus}}</p>
   }
 </div>
-
-

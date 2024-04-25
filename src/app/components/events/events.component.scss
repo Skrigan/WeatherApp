@@ -20,9 +20,19 @@
       color: white;
       background-color: #122E65;
       margin-right: 26px;
+      @media (max-width: 450px) {
+        margin-right: 16px;
+        line-height: 30px;
+        border-radius: 15px;
+        font-size: 15px;
+        //font-size: 18px;
+      }
     }
     &__text {
       font-size: 23px;
+      @media (max-width: 450px) {
+        font-size: 18px;
+      }
     }
   }
 

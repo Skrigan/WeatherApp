@@ -4,8 +4,12 @@
   align-items: center;
 
   &__day {
+    text-wrap: nowrap;
     font-size: 20px;
     margin-bottom: 15px;
+    @media (max-width: 640px) {
+      font-size: 15px;
+    }
   }
 
   &__icon {
@@ -21,7 +25,7 @@
   &__temp {
     font-size: 28px;
     @media (max-width: 640px) {
-      font-size: 22px;
+      font-size: 20px;
     }
   }
 
@@ -41,6 +45,9 @@
       @media (max-width: 900px) {
         font-size: 20px;
         align-self: auto;
+      }
+      @media (max-width: 640px) {
+        font-size: 15px;
       }
     }
 

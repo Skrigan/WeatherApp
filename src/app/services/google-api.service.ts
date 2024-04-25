@@ -7,12 +7,12 @@ import { environment } from '../../environments/environment';
 
 const { oAuthConfig } = environment;
 
-interface UserInfo {
+type UserInfo = {
   info: {
     email: string
     name: string
   }
-}
+};
 
 @Injectable({
   providedIn: 'root',

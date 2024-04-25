@@ -6,10 +6,7 @@
   <app-auth></app-auth>
   <div class="events-and-buttons">
     <app-events></app-events>
-    <div class="weather-buttons">
-      <button (click)="onDaily()" class="daily-button" type="button">Daily</button>
-      <button (click)="onHourly()" class="hourly-button" type="button">Hourly</button>
-    </div>
+    <app-weather-buttons class="weather-buttons" (forecastSwitch)="onForecastSwitch($event)"></app-weather-buttons>
   </div>
 </div>
-<app-weather [isDaily]="isDaily" [dailyForecast]="dailyForecast" [hourlyForecast]="hourlyForecast"></app-weather>
+<app-weather [isDaily]="isDaily" [searchStatus]="searchStatus" [dailyForecast]="dailyForecast" [hourlyForecast]="hourlyForecast"></app-weather>

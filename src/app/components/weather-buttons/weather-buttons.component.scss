@@ -1,0 +1,7 @@
+.weather-buttons {
+  display: flex;
+  gap: 36px;
+  @media (max-width: 900px) {
+    justify-content: center;
+  }
+}

@@ -1,18 +1,20 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from "@angular/forms";
-import {WeatherService} from "../../services/weather.service";
-import {Autocomplete} from "../../types/accuWeather/autocomplete";
-import {debounceTime, filter, fromEvent, map, tap} from "rxjs";
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import {
+  debounceTime, filter, fromEvent, map, tap,
+} from 'rxjs';
+import { WeatherService } from '../../services/weather.service';
+import { Autocomplete } from '../../types/accuWeather/autocomplete';
 
 @Component({
   selector: 'app-search-input',
@@ -20,6 +22,7 @@ import {debounceTime, filter, fromEvent, map, tap} from "rxjs";
   imports: [CommonModule, FormsModule],
   templateUrl: './search-input.component.html',
   styleUrl: './search-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchInputComponent implements OnInit {
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
@@ -36,7 +39,7 @@ export class SearchInputComponent implements OnInit {
 
   isFocused = false;
 
-  constructor(private weatherService: WeatherService) {
+  constructor(private weatherService: WeatherService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -50,6 +53,7 @@ export class SearchInputComponent implements OnInit {
         this.weatherService.getAutocomplete(str)
           .subscribe((autocomplete) => {
             this.autocomplete = autocomplete.slice(0, 5);
+            this.cdr.detectChanges();
           });
       });
   }

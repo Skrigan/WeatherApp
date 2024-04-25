@@ -1,8 +1,10 @@
 import {
+  ChangeDetectionStrategy,
   Component, ElementRef, OnInit, ViewChild,
 } from '@angular/core';
 import {
-  debounceTime, filter, fromEvent, map, tap,
+  catchError,
+  debounceTime, filter, fromEvent, map, of, tap,
 } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,13 +20,14 @@ import { WeatherItemComponent } from './components/weather-item/weather-item.com
 import { WeatherDailyComponent } from './components/weather-daily/weather-daily.component';
 import { WeatherComponent } from './components/weather/weather.component';
 import { AuthComponent } from './components/auth/auth.component';
-import {EventsComponent} from "./components/events/events.component";
-import {SearchInputComponent} from "./components/search-input/search-input.component";
+import { EventsComponent } from './components/events/events.component';
+import { SearchInputComponent } from './components/search-input/search-input.component';
+import { WeatherButtonsComponent } from './components/weather-buttons/weather-buttons.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, FormsModule, WeatherItemComponent, WeatherDailyComponent, WeatherComponent, AuthComponent, EventsComponent, SearchInputComponent],
+  imports: [CommonModule, LoaderComponent, WeatherHourlyComponent, WeatherItemComponent, WeatherDailyComponent, WeatherComponent, AuthComponent, EventsComponent, SearchInputComponent, WeatherButtonsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -43,11 +46,11 @@ export class AppComponent implements OnInit {
 
   hourlyForecast: Array<HourlyForecastItem & { icon: string }> = [];
 
-  isFocused = false;
-
   location = '';
 
   isDaily = true;
+
+  searchStatus: string | undefined;
 
   constructor(private weatherService: WeatherService, public googleApi: GoogleApiService) {
   }
@@ -55,28 +58,27 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.date = new Date(), 1000);
 
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.weatherService.getCity(latitude, longitude)
-          .subscribe((geoposition) => {
-            this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
-            this.locationKey = geoposition.Key;
-            this.getForecast();
-            this.changeBodyBackground();
-          });
-      });
-    }
+    // if ('geolocation' in navigator) {
+    //   navigator.geolocation.getCurrentPosition((position) => {
+    //     const { latitude, longitude } = position.coords;
+    //     this.latitude = latitude;
+    //     this.longitude = longitude;
+    //     this.weatherService.getCity(latitude, longitude)
+    //       .subscribe((geoposition) => {
+    //         this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
+    //         this.locationKey = geoposition.Key;
+    //         this.getForecast();
+    //         this.changeBodyBackground();
+    //       });
+    //   });
+    // }
   }
 
   changeBodyBackground() {
     if (this.latitude && this.longitude) {
       this.weatherService.getCurrentWeather(this.latitude, this.longitude).subscribe((weather) => {
         const img = new Image();
-        const { main } = weather.weather[0];
-        const { description } = weather.weather[0];
+        const { main, description } = weather.weather[0];
         let path = '';
 
         if (main !== 'Clouds') path = main;
@@ -93,14 +95,26 @@ export class AppComponent implements OnInit {
   onSearch(location: string) {
     this.searchReset();
 
-    this.weatherService.getCitySearch(location).subscribe((cities) => {
-      const city = cities[0];
-      this.latitude = city.GeoPosition.Latitude;
-      this.longitude = city.GeoPosition.Longitude;
-      this.locationKey = city.Key;
-      this.getForecast();
-      this.changeBodyBackground();
-    });
+    this.weatherService.getCitySearch(location)
+      .subscribe({
+        next: (cities) => {
+          if (cities.length > 0) {
+            const city = cities[0];
+            this.latitude = city.GeoPosition.Latitude;
+            this.longitude = city.GeoPosition.Longitude;
+            this.location = `${city.LocalizedName}, ${city.Country.LocalizedName}`;
+            this.locationKey = city.Key;
+            this.searchStatus = 'load';
+            this.getForecast();
+            this.changeBodyBackground();
+          } else {
+            this.searchStatus = 'No cities found for the given query';
+          }
+        },
+        error: () => {
+          this.searchStatus = 'Unknown error';
+        },
+      });
   }
 
   onElasticSearch(locationKey: string) {
@@ -116,6 +130,7 @@ export class AppComponent implements OnInit {
   }
 
   searchReset() {
+    this.searchStatus = 'load';
     this.dailyForecast = [];
     this.hourlyForecast = [];
 
@@ -142,21 +157,12 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onDaily() {
-    if (!this.isDaily) {
-      this.isDaily = true;
-      if (this.dailyForecast.length === 0) {
-        this.getForecast();
-      }
-    }
-  }
+  onForecastSwitch(isDaily: boolean) {
+    this.isDaily = isDaily;
 
-  onHourly() {
-    if (this.isDaily) {
-      this.isDaily = false;
-      if (this.hourlyForecast.length === 0) {
-        this.getForecast();
-      }
+    if ((isDaily && this.dailyForecast.length === 0)
+      || (!isDaily && this.hourlyForecast.length === 0)) {
+      this.getForecast();
     }
   }
 }

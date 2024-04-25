@@ -20,4 +20,6 @@ export class WeatherComponent {
   @Input({ required: true }) dailyForecast!: Array<DailyForecastItem & { icon: string }>;
 
   @Input({ required: true }) hourlyForecast!: Array<HourlyForecastItem & { icon: string }>;
+
+  @Input({ required: true }) searchStatus: string | undefined;
 }

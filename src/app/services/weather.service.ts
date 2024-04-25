@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Autocomplete } from '../types/accuWeather/autocomplete';
 import { DailyForecast } from '../types/accuWeather/daily-forecast';
-import { CitySearch } from '../types/accuWeather/city-search';
+import {CitySearch, CitySearchItem} from '../types/accuWeather/city-search';
 import { HourlyForecast } from '../types/openWeather/hourly-forecast';
 import { CacheService } from './cache/cache.service';
 import { cachedRequest } from './cache/cache-decorator';
 import { CurrentWeather } from '../types/openWeather/current-weather';
 import { City } from '../types/accuWeather/city';
 import { environment } from '../../environments/environment';
+import {Observable} from "rxjs";
 
 const { apikey, appid } = environment;
 
@@ -23,7 +24,7 @@ export class WeatherService {
   constructor(private http: HttpClient, private cache: CacheService) { }
 
   @cachedRequest(function () { return this.cache; })
-  getAutocomplete(text: string) {
+  getAutocomplete(text: string): Observable<Autocomplete> {
     return this.http.get<Autocomplete>(`${this.accuOrigin}/locations/v1/cities/autocomplete`, {
       params: {
         apikey,
@@ -33,7 +34,7 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getCitySearch(text: string) {
+  getCitySearch(text: string): Observable<CitySearch> {
     return this.http.get<CitySearch>(`${this.accuOrigin}/locations/v1/cities/search`, {
       params: {
         apikey,
@@ -43,7 +44,7 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getCity(latitude: number, longitude: number) {
+  getCity(latitude: number, longitude: number): Observable<City> {
     return this.http.get<City>(`${this.accuOrigin}/locations/v1/cities/geoposition/search`, {
       params: {
         apikey,
@@ -53,7 +54,7 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getCityByLocationKey(locationKey: string) {
+  getCityByLocationKey(locationKey: string): Observable<CitySearchItem> {
     return this.http.get<CitySearch[number]>(`${this.accuOrigin}/locations/v1/${locationKey}`, {
       params: {
         apikey,
@@ -62,7 +63,7 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getDailyForecast(locationKey: string) {
+  getDailyForecast(locationKey: string): Observable<DailyForecast> {
     return this.http.get<DailyForecast>(`${this.accuOrigin}/forecasts/v1/daily/5day/${locationKey}`, {
       params: {
         apikey,
@@ -72,7 +73,7 @@ export class WeatherService {
   }
 
   @cachedRequest(function () { return this.cache; })
-  getHourlyForecast(latitude: number, longitude: number) {
+  getHourlyForecast(latitude: number, longitude: number): Observable<HourlyForecast> {
     return this.http.get<HourlyForecast>(`${this.openOrigin}/data/2.5/forecast`, {
       params: {
         lat: latitude,
@@ -83,7 +84,7 @@ export class WeatherService {
     });
   }
 
-  getCurrentWeather(latitude: number, longitude: number) {
+  getCurrentWeather(latitude: number, longitude: number): Observable<CurrentWeather> {
     return this.http.get<CurrentWeather>(`${this.openOrigin}/data/2.5/weather`, {
       params: {
         lat: latitude,

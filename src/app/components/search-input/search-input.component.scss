@@ -11,8 +11,9 @@
     outline: none;
     border: none;
     padding: 4px 15px;
-    @media (max-width: 640px) {
+    @media (max-width: 450px) {
       width: 170px;
+      font-size: 18px;
     }
   }
 
@@ -26,6 +27,10 @@
     position: absolute;
     top: 50px;
     z-index: 1;
+    @media (max-width: 450px) {
+      font-size: 18px;
+      width: 200px;
+    }
   }
   &__loader {
     width: 258px;
