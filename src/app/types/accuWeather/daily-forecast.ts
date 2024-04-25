@@ -1,21 +1,5 @@
-import { phraseToIcon } from '../../data/phraseToIcon';
+import { DailyForecastItem } from './daily-forecast-item';
 
 export type DailyForecast = {
   DailyForecasts: DailyForecastItem[]
-};
-
-export type DailyForecastItem = {
-  Date: string,
-  Temperature: {
-    Minimum: {
-      Value: number
-    },
-    Maximum: {
-      Value: number
-    }
-  }
-  Day: {
-    IconPhrase: keyof typeof phraseToIcon
-  }
-  Link: string
 };

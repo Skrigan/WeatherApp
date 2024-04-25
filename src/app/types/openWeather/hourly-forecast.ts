@@ -1,13 +1,5 @@
-import { Weather } from './weather';
+import { HourlyForecastItem } from './hourly-forecast-item';
 
 export type HourlyForecast = {
   list: HourlyForecastItem[]
-};
-
-export type HourlyForecastItem = {
-  main: {
-    temp: number
-  }
-  weather: Weather[]
-  dt_txt: string
 };

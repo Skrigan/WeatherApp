@@ -48,7 +48,6 @@ export class SearchInputComponent implements OnInit, OnDestroy {
     this.keyupEvent = fromEvent(this.inputElement.nativeElement, 'keyup')
       .pipe(
         tap(() => { this.autocomplete = []; }),
-        tap(() => console.log('key!')),
         debounceTime(500),
         map((ev: any) => (ev.target as HTMLInputElement).value),
         filter((str) => (str.length > 2)),

@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Autocomplete } from '../types/accuWeather/autocomplete';
 import { DailyForecast } from '../types/accuWeather/daily-forecast';
-import { CitySearch, CitySearchItem } from '../types/accuWeather/city-search';
+import { CitySearch } from '../types/accuWeather/city-search';
 import { HourlyForecast } from '../types/openWeather/hourly-forecast';
 import { CacheService } from './cache/cache.service';
 import { cachedRequest } from './cache/cache-decorator';
 import { CurrentWeather } from '../types/openWeather/current-weather';
 import { City } from '../types/accuWeather/city';
 import { environment } from '../../environments/environment';
+import { CitySearchItem } from '../types/accuWeather/city-search-item';
 
 const { apikey, appid } = environment;
 

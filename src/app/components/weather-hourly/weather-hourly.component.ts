@@ -2,8 +2,8 @@ import {
   ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild,
 } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { HourlyForecastItem } from '../../types/openWeather/hourly-forecast';
 import { WeatherItemComponent } from '../weather-item/weather-item.component';
+import { HourlyForecastView } from '../../types/openWeather/hourly-forecast-view';
 
 @Component({
   selector: 'app-weather-hourly',
@@ -20,7 +20,7 @@ import { WeatherItemComponent } from '../weather-item/weather-item.component';
 export class WeatherHourlyComponent {
   @ViewChild('slides', { static: true }) slides!: ElementRef;
 
-  @Input({ required: true }) hourlyForecast!: Array<HourlyForecastItem & { icon: string }>;
+  @Input({ required: true }) hourlyForecast!: HourlyForecastView;
 
   currentSlide = 0;
 

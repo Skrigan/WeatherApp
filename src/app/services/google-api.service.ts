@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { OAuthService, UserInfo } from 'angular-oauth2-oidc';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Events, Event } from '../types/googleCalendar/events';
+import { Events } from '../types/googleCalendar/events';
+import { Event } from '../types/googleCalendar/event';
 import { environment } from '../../environments/environment';
 
 const { oAuthConfig } = environment;

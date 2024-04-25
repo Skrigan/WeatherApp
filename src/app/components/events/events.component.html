@@ -1,4 +1,4 @@
-@if (!((googleApi.calendarEvents$ | async) === null && (googleApi.userProfile$ | async)?.info)) {
+@if (!((googleApi.calendarEvents$ | async) === null && (googleApi.userProfile$ | async)?.['info'])) {
   <ul class="events">
     @for(event of googleApi.calendarEvents$ | async; track event.id) {
       <li class="event">

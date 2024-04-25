@@ -2,10 +2,9 @@ import {
   Component, ElementRef, OnDestroy, OnInit, ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DailyForecastItem } from './types/accuWeather/daily-forecast';
+import { interval, Subscription } from 'rxjs';
 import { GoogleApiService } from './services/google-api.service';
 import { WeatherService } from './services/weather.service';
-import { HourlyForecastItem } from './types/openWeather/hourly-forecast';
 import { phraseToIcon } from './data/phraseToIcon';
 import { LoaderComponent } from './components/loader/loader.component';
 import { WeatherHourlyComponent } from './components/weather-hourly/weather-hourly.component';
@@ -16,7 +15,8 @@ import { AuthComponent } from './components/auth/auth.component';
 import { EventsComponent } from './components/events/events.component';
 import { SearchInputComponent } from './components/search-input/search-input.component';
 import { WeatherButtonsComponent } from './components/weather-buttons/weather-buttons.component';
-import {interval, Observable, Subscription} from "rxjs";
+import { DailyForecastView } from './types/accuWeather/daily-forecast-view';
+import { HourlyForecastView } from './types/openWeather/hourly-forecast-view';
 
 @Component({
   selector: 'app-root',
@@ -47,9 +47,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   longitude: number | undefined;
 
-  dailyForecast: Array<DailyForecastItem & { icon: string }> = [];
+  dailyForecast: DailyForecastView = [];
 
-  hourlyForecast: Array<HourlyForecastItem & { icon: string }> = [];
+  hourlyForecast: HourlyForecastView = [];
 
   location = '';
 

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WeatherItemComponent } from '../weather-item/weather-item.component';
-import { DailyForecastItem } from '../../types/accuWeather/daily-forecast';
+import { DailyForecastView } from '../../types/accuWeather/daily-forecast-view';
 
 @Component({
   selector: 'app-weather-daily',
@@ -12,5 +12,5 @@ import { DailyForecastItem } from '../../types/accuWeather/daily-forecast';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherDailyComponent {
-  @Input({ required: true }) dailyForecast!: Array<DailyForecastItem & { icon: string }>;
+  @Input({ required: true }) dailyForecast!: DailyForecastView;
 }

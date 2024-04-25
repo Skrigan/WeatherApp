@@ -1,5 +1,5 @@
 <div class="auth">
-  @if((googleApi.userProfile$ | async)?.info; as info) {
+  @if((googleApi.userProfile$ | async)?.['info']; as info) {
     <div class="auth__profile">
       <p class="auth__name">{{info?.name}}</p>
       <p class="auth__email">{{info?.email}}</p>

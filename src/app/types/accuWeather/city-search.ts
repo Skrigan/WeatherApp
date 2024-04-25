@@ -1,10 +1,3 @@
-import { City } from './city';
+import { CitySearchItem } from './city-search-item';
 
 export type CitySearch = CitySearchItem[];
-
-export type CitySearchItem = City & {
-  GeoPosition: {
-    Latitude: number
-    Longitude: number
-  }
-};
