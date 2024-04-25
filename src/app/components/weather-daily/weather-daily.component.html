@@ -1,0 +1,5 @@
+<div class="weather-daily">
+  @for(forecast of dailyForecast; track forecast.Link; let i = $index) {
+    <app-weather-item [date]="forecast.Date" [icon]="forecast.icon"  [temp]="forecast.Temperature.Maximum.Value" [type]="i === 0 ? 'dailyFirst' : 'daily'"></app-weather-item>
+  }
+</div>

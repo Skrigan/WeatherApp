@@ -1,0 +1,5 @@
+<div class="weather-item" [ngClass]="{ 'weather-item_today': type === 'dailyFirst'}">
+  <div class="weather-item__day">{{date | date: type !== 'hourly' ? 'EEEE' : 'EEE HH:mm'}}</div>
+  <img class="weather-item__icon" [src]="'assets/icons/' + icon + '.svg'" [alt]="icon">
+  <div class="weather-item__temp">{{temp | number : '1.0-0'}}°</div>
+</div>

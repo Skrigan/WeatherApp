@@ -1,6 +1,9 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, ViewChild,
+  ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild,
 } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { HourlyForecastItem } from '../../types/openWeather/hourly-forecast';
+import { WeatherItemComponent } from '../weather-item/weather-item.component';
 
 @Component({
   selector: 'app-slider',
@@ -8,13 +11,22 @@ import {
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DatePipe,
+    DecimalPipe,
+    WeatherItemComponent,
+  ],
 })
 export class SliderComponent {
   @ViewChild('slides', { static: true }) slides!: ElementRef;
 
+  @Input({ required: true }) hourlyForecast!: Array<HourlyForecastItem & { icon: string }>;
+
   currentSlide = 0;
 
   maxSlide = 4;
+
+  indexes: number[] = [8, 16, 24, 32, 40];
 
   startX = 0;
 

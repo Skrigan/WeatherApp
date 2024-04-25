@@ -4,7 +4,13 @@
   </div>
   <div class="hidden">
     <div class="slides" #slides (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)">
-      <ng-content></ng-content>
+      @for(index of indexes; track index) {
+        <div class="weather-hourly">
+          @for(forecast of hourlyForecast.slice(index - 8, index); track forecast) {
+            <app-weather-item [date]="forecast.dt_txt" [icon]="forecast.icon"  [temp]="forecast.main.temp" [type]="'hourly'"></app-weather-item>
+          }
+        </div>
+      }
     </div>
   </div>
   <div class="control control_right" (click)="moveRight()">

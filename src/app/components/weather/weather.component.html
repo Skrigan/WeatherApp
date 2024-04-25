@@ -1,0 +1,9 @@
+<div class="weather-background">
+  @if(isDaily && dailyForecast.length) {
+  <app-weather-daily [dailyForecast]="dailyForecast"></app-weather-daily>
+  } @else if(!isDaily && hourlyForecast.length) {
+  <app-slider [hourlyForecast]="hourlyForecast"></app-slider>
+  } @else {
+  <app-loader class="weather-loader"></app-loader>
+  }
+</div>

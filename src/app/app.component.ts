@@ -14,11 +14,14 @@ import { Autocomplete } from './types/accuWeather/autocomplete';
 import { phraseToIcon } from './data/phraseToIcon';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SliderComponent } from './components/slider/slider.component';
+import { WeatherItemComponent } from './components/weather-item/weather-item.component';
+import {WeatherDailyComponent} from "./components/weather-daily/weather-daily.component";
+import {WeatherComponent} from "./components/weather/weather.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, SliderComponent, FormsModule],
+  imports: [CommonModule, LoaderComponent, SliderComponent, FormsModule, WeatherItemComponent, WeatherDailyComponent, WeatherComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -34,8 +37,6 @@ export class AppComponent implements OnInit {
   latitude: number | undefined;
 
   longitude: number | undefined;
-
-  indexes: number[] = [8, 16, 24, 32, 40];
 
   dailyForecast: Array<DailyForecastItem & { icon: string }> = [];
 
@@ -53,20 +54,20 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     setInterval(() => this.date = new Date(), 1000);
 
-    // if ('geolocation' in navigator) {
-    //   navigator.geolocation.getCurrentPosition((position) => {
-    //     const { latitude, longitude } = position.coords;
-    //     this.latitude = latitude;
-    //     this.longitude = longitude;
-    //     this.weatherService.getCity(latitude, longitude)
-    //       .subscribe((geoposition) => {
-    //         this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
-    //         this.locationKey = geoposition.Key;
-    //         this.getForecast();
-    //         this.changeBodyBackground();
-    //       });
-    //   });
-    // }
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.weatherService.getCity(latitude, longitude)
+          .subscribe((geoposition) => {
+            this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
+            this.locationKey = geoposition.Key;
+            this.getForecast();
+            this.changeBodyBackground();
+          });
+      });
+    }
 
     fromEvent(this.inputElement.nativeElement, 'keyup')
       .pipe(
