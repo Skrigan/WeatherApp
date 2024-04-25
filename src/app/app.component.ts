@@ -12,20 +12,20 @@ import { WeatherService } from './services/weather.service';
 import { HourlyForecastItem } from './types/openWeather/hourly-forecast';
 import { Autocomplete } from './types/accuWeather/autocomplete';
 import { phraseToIcon } from './data/phraseToIcon';
-import { ButtonComponent } from './components/button/button.component';
-import { DateComponent } from './components/date/date.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SliderComponent } from './components/slider/slider.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, DateComponent, LoaderComponent, SliderComponent, FormsModule],
+  imports: [CommonModule, LoaderComponent, SliderComponent, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   @ViewChild('inputElement', { static: true }) inputElement!: ElementRef;
+
+  date = new Date();
 
   location = '';
 
@@ -51,20 +51,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.weatherService.getCity(latitude, longitude)
-          .subscribe((geoposition) => {
-            this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
-            this.locationKey = geoposition.Key;
-            this.getForecast();
-            this.changeBodyBackground();
-          });
-      });
-    }
+    setInterval(() => this.date = new Date(), 1000);
+
+    // if ('geolocation' in navigator) {
+    //   navigator.geolocation.getCurrentPosition((position) => {
+    //     const { latitude, longitude } = position.coords;
+    //     this.latitude = latitude;
+    //     this.longitude = longitude;
+    //     this.weatherService.getCity(latitude, longitude)
+    //       .subscribe((geoposition) => {
+    //         this.location = `${geoposition.LocalizedName}, ${geoposition.Country.LocalizedName}`;
+    //         this.locationKey = geoposition.Key;
+    //         this.getForecast();
+    //         this.changeBodyBackground();
+    //       });
+    //   });
+    // }
 
     fromEvent(this.inputElement.nativeElement, 'keyup')
       .pipe(

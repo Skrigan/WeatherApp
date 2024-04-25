@@ -1,8 +1,8 @@
 <div class="date-and-city">
-  <app-date></app-date>
+  <h1 class="date">{{date | date:'hh:mm a'}}<br>{{date | date:'EEEE, d MMMM y'}}</h1>
   <form class="city-form">
     <input #inputElement (keydown.enter)="onSearch()" (focus)="onFocus()" (blur)="onBlur()" class="city-form__input" type="text" name="location" autocomplete="off" [(ngModel)]="location">
-    <app-button  class="city-form__button" (click)="onSearch()" [text]="'Search'"></app-button>
+    <button class="city-form__button" (click)="onSearch()" type="button">Search</button>
     @if(isFocused && (autocomplete.length)) {
       <ul class="city-form__autocomplete-ul">
         @for(item of autocomplete; track item.Key) {
@@ -19,9 +19,9 @@
         <p class="auth__name">{{info?.name}}</p>
         <p class="auth__email">{{info?.email}}</p>
       </div>
-      <app-button (click)="onSignOut()" class="auth__button" [text]="'Sign Out'"></app-button>
+      <button (click)="onSignOut()" class="auth__button" type="button">Sign Out</button>
     } @else if ((googleApi.userProfile$ | async) === null) {
-      <app-button (click)="onSignIn()" class="auth__button" [text]="'Sign In'"></app-button>
+    <button (click)="onSignIn()" class="auth__button" type="button">Sign In</button>
     }
   </div>
   <div class="events-and-buttons">
@@ -38,8 +38,8 @@
       <app-loader class="events__loader"></app-loader>
     }
     <div class="weather-buttons">
-      <app-button class="daily-button" [text]="'Daily'" (click)="onDaily()"></app-button>
-      <app-button class="hourly-button" [text]="'Hourly'" (click)="onHourly()"></app-button>
+      <button (click)="onDaily()" class="daily-button" type="button">Daily</button>
+      <button (click)="onHourly()" class="hourly-button" type="button">Hourly</button>
     </div>
   </div>
 </div>
