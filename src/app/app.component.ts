@@ -16,16 +16,11 @@ import { ButtonComponent } from './components/button/button.component';
 import { DateComponent } from './components/date/date.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SliderComponent } from './components/slider/slider.component';
-import {OAuthModule} from "angular-oauth2-oidc";
-
-// @ts-ignore
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  // providers: [GoogleApiService, WeatherService],
-  // @ts-ignore
-  imports: [CommonModule, ButtonComponent, DateComponent, LoaderComponent, SliderComponent, FormsModule, ],
+  imports: [CommonModule, ButtonComponent, DateComponent, LoaderComponent, SliderComponent, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

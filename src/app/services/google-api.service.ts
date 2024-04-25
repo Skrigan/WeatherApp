@@ -3,17 +3,9 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Events } from '../types/googleCalendar/events';
+import { environment } from '../../environments/environment';
 
-const oAuthConfig = {
-  issuer: 'https://accounts.google.com',
-  strictDiscoveryDocumentValidation: false,
-  redirectUri: window.location.origin,
-  clientId: '1024400438746-sng2oomsojnkg854lah02onrrjn6muqe.apps.googleusercontent.com',
-  scope: 'openid profile email https://www.googleapis.com/auth/calendar.readonly',
-  showDebugInformation: true,
-  silentRefreshRedirectUri: window.location.origin,
-  useSilentRefresh: true,
-};
+const { oAuthConfig } = environment;
 
 interface UserInfo {
   info: {
